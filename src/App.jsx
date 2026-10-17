@@ -5,6 +5,8 @@ import Lenis from 'lenis';
 import Header from './components/Header.jsx';
 import Hero from './components/Hero.jsx';
 import SchoolHighlights from './components/SchoolHighlights.jsx';
+import CampusSections from './components/CampusSections.jsx';
+import LearningStory from './components/LearningStory.jsx';
 import Reviews from './components/Reviews.jsx';
 import StoryImage from './components/StoryImage.jsx';
 import FAQ from './components/FAQ.jsx';
@@ -135,6 +137,8 @@ export default function App() {
       <main>
         <Hero />
         <SchoolHighlights />
+        <CampusSections />
+        <LearningStory />
         <Reviews />
         <StoryImage />
         <FAQ />

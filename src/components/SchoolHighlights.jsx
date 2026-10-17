@@ -36,6 +36,55 @@ export default function SchoolHighlights() {
           once: true,
         },
       });
+
+      gsap.fromTo('.school-highlights__philosophy-content', {
+        autoAlpha: 0,
+        y: 20,
+      }, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.85,
+        delay: 0.2,
+        ease: 'power2.out',
+      });
+
+      const featuresAnimation = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.school-highlights__features',
+          start: 'top 82%',
+          once: true,
+        },
+      });
+
+      featuresAnimation
+        .fromTo('.school-highlights__features-background', {
+          autoAlpha: 0,
+          scale: 1.02,
+        }, {
+          autoAlpha: 1,
+          scale: 1,
+          duration: 1,
+          ease: 'power2.out',
+        })
+        .fromTo('.school-highlights__features-heading', {
+          autoAlpha: 0,
+          y: 18,
+        }, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.72,
+          ease: 'power2.out',
+        }, 0.18)
+        .fromTo('.school-highlights__features li', {
+          autoAlpha: 0,
+          y: 12,
+        }, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.52,
+          stagger: 0.07,
+          ease: 'power2.out',
+        }, 0.3);
     }, section);
 
     return () => context.revert();
@@ -82,28 +131,33 @@ export default function SchoolHighlights() {
         </div>
 
         <div className="school-highlights__philosophy" id="school-philosophy">
-          <figure className="school-highlights__quote">
-            <span className="school-highlights__quote-mark" aria-hidden="true">&ldquo;</span>
-            <blockquote>{schoolPhilosophy.quote}</blockquote>
-            <figcaption>&mdash; {schoolPhilosophy.attribution}</figcaption>
-          </figure>
-          <div className="school-highlights__about">
-            <p className="school-highlights__eyebrow">OUR PHILOSOPHY</p>
-            {schoolPhilosophy.paragraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
+          <div className="school-highlights__philosophy-content">
+            <figure className="school-highlights__quote">
+              <span className="school-highlights__quote-mark" aria-hidden="true">&ldquo;</span>
+              <blockquote>{schoolPhilosophy.quote}</blockquote>
+              <figcaption>&mdash; {schoolPhilosophy.attribution}</figcaption>
+            </figure>
+            <div className="school-highlights__about">
+              <p className="school-highlights__eyebrow">OUR PHILOSOPHY</p>
+              {schoolPhilosophy.paragraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
           </div>
         </div>
 
         <div className="school-highlights__features" id="school-features">
-          <div className="school-highlights__features-heading">
-            <h2>School <em>features.</em></h2>
+          <div className="school-highlights__features-background" aria-hidden="true" />
+          <div className="school-highlights__features-content">
+            <div className="school-highlights__features-heading">
+              <h2>School <em>features.</em></h2>
+            </div>
+            <ul>
+              {schoolFeatures.map((feature) => (
+                <li key={feature}>{feature}</li>
+              ))}
+            </ul>
           </div>
-          <ul>
-            {schoolFeatures.map((feature) => (
-              <li key={feature}>{feature}</li>
-            ))}
-          </ul>
         </div>
 
         <div className="school-highlights__advantages">

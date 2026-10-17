@@ -1,11 +1,8 @@
 import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { heroImages } from '../data/heroImages.js';
 import { heroStudents } from '../data/heroStudents.js';
 import '../hero.css';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const stages = [
   {
@@ -79,22 +76,13 @@ export default function Hero() {
 
     const panels = Array.from(root.querySelectorAll('.hero-panel'));
     const progressItems = Array.from(root.querySelectorAll('.hero-progress li'));
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    root.classList.add('is-enhanced', 'is-mobile-enhanced');
     const updateActiveStage = (index) => {
       panels.forEach((panel, panelIndex) => {
         panel.setAttribute('aria-hidden', String(panelIndex !== index));
+        panel.classList.toggle('is-active', panelIndex === index);
       });
-      progressItems.forEach((item, itemIndex) => {
-        if (itemIndex === index) item.setAttribute('aria-current', 'step');
-        else item.removeAttribute('aria-current');
-      });
-      root.dataset.activeStage = String(index + 1);
-    };
-    const resetAccessibleStages = () => {
-      panels.forEach((panel) => panel.setAttribute('aria-hidden', 'false'));
-      progressItems.forEach((item) => item.removeAttribute('aria-current'));
-      delete root.dataset.activeStage;
-    };
-    const updateProgress = (index) => {
       progressItems.forEach((item, itemIndex) => {
         if (itemIndex === index) item.setAttribute('aria-current', 'step');
         else item.removeAttribute('aria-current');
@@ -103,320 +91,113 @@ export default function Hero() {
     };
 
     const context = gsap.context(() => {
-      const media = gsap.matchMedia();
+      updateActiveStage(0);
 
-      media.add('(min-width: 1025px) and (prefers-reduced-motion: no-preference)', () => {
-        const frame = root.querySelector('.hero-stage');
-        const photos = panels.map((panel) => panel.querySelector('.hero-photo img'));
-        const students = panels.map((panel) => panel.querySelector('.hero-student'));
-        const copies = panels.map((panel) => panel.querySelector('.hero-copy'));
-        const staggerGroups = panels.map((panel) => (
-          panel.querySelectorAll('.hero-stagger > span, .hero-keywords > span')
-        ));
-        const transitionStarts = stages.map((_, index) => (
-          index === 0 ? 0 : (index * 5 / 6) - 0.15
-        ));
+      const photos = panels.map((panel) => panel.querySelector('.hero-photo img:not(.hero-student)'));
+      const students = panels.map((panel) => panel.querySelector('.hero-student'));
+      const copies = panels.map((panel) => panel.querySelector('.hero-copy'));
 
-        root.classList.add('is-enhanced');
-        updateActiveStage(0);
-        gsap.set(panels, { autoAlpha: 0 });
-        gsap.set(panels[0], { autoAlpha: 1 });
-        gsap.set(photos, { scale: 1.08, clipPath: 'inset(0 100% 0 0)', xPercent: 0 });
-        gsap.set(photos[0], { scale: 1.08, clipPath: 'inset(0)' });
-        gsap.set(students, { autoAlpha: 0, scale: 1.04, x: 20, y: 20 });
-        gsap.set(students[0], { autoAlpha: 1, scale: 1, x: 0, y: 0 });
-        gsap.set(copies, { autoAlpha: 0, y: 40 });
-        gsap.set(copies[0], { autoAlpha: 1, y: 0 });
-        staggerGroups.forEach((group) => {
-          if (group.length) gsap.set(group, { autoAlpha: 0, yPercent: 18 });
-        });
+      gsap.set(panels, { autoAlpha: 0, zIndex: 0 });
+      gsap.set(photos, { autoAlpha: 0, scale: 1.08, xPercent: 0 });
+      gsap.set(students, { autoAlpha: 0, scale: 0.98, x: 0, y: 12 });
+      gsap.set(copies, { autoAlpha: 0, y: 22 });
+      gsap.set(panels[0], { autoAlpha: 1, zIndex: 2 });
+      gsap.set(photos[0], { autoAlpha: 1, scale: 1.08 });
+      gsap.set(students[0], { autoAlpha: 1, scale: 1, x: 0, y: 0 });
+      gsap.set(copies[0], { autoAlpha: 1, y: 0 });
 
-        const timeline = gsap.timeline({
-          onUpdate: () => {
-            const elapsed = timeline.progress() * timeline.duration();
-            let activeIndex = 0;
-            transitionStarts.forEach((start, index) => {
-              if (elapsed >= start) activeIndex = index;
-            });
-            if (root.dataset.activeStage !== String(activeIndex + 1)) {
-              updateActiveStage(activeIndex);
-            }
-          },
-          scrollTrigger: {
-            trigger: root,
-            pin: frame,
-            pinSpacing: false,
-            start: 'top top+=88',
-            end: () => `+=${Math.round(window.innerHeight * 5)}`,
-            scrub: 1,
-            invalidateOnRefresh: true,
-          },
-        });
+      if (reducedMotion) {
+        gsap.set(photos[0], { autoAlpha: 1, scale: 1 });
+        return;
+      }
 
-        timeline.to(photos[0], {
-          scale: 1,
-          yPercent: -2,
-          clipPath: 'inset(0)',
-          duration: 0.6,
-          ease: 'none',
-        }, 0);
-        timeline.to(copies[0], {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.55,
-          ease: 'none',
-        }, 0.08);
+      const slideDuration = 3;
+      const transitionDuration = 0.95;
+      const transitionStart = slideDuration - transitionDuration;
+      const timeline = gsap.timeline({ repeat: -1 });
 
-        for (let index = 1; index < panels.length; index += 1) {
-          const position = transitionStarts[index];
-          const revealFrom = index === 3 ? 'inset(100% 0 0 0)' : 'inset(0 100% 0 0)';
+      for (let index = 0; index < panels.length; index += 1) {
+        const nextIndex = (index + 1) % panels.length;
+        const sectionStart = index * slideDuration;
+        const transitionAt = sectionStart + transitionStart;
+        const direction = index % 2 === 0 ? 1 : -1;
 
-          gsap.set(photos[index], { clipPath: revealFrom });
-          if (index === 2) gsap.set(photos[index], { xPercent: 2 });
-          timeline.set(panels[index], { autoAlpha: 1 }, position);
-          timeline.to(photos[index], {
-            scale: 1,
-            clipPath: 'inset(0)',
-            xPercent: 0,
-            duration: 0.52,
-            ease: 'none',
-          }, position);
-          timeline.to(students[index], {
-            autoAlpha: 1,
-            scale: 1,
-            x: 0,
-            y: 0,
-            duration: 0.52,
-            ease: 'none',
-          }, position);
-          timeline.to(students[index - 1], {
+        timeline.to(photos[index], {
+          scale: 1.035,
+          duration: transitionStart,
+          ease: 'sine.inOut',
+        }, sectionStart);
+
+        timeline.to(students[index], {
+          y: -5,
+          duration: transitionStart,
+          ease: 'sine.inOut',
+        }, sectionStart);
+
+        timeline
+          .set(panels[nextIndex], { autoAlpha: 1, zIndex: 3 }, transitionAt)
+          .set(photos[nextIndex], {
+            autoAlpha: 0,
+            scale: 1.08,
+            xPercent: direction * 1.2,
+          }, transitionAt)
+          .set(students[nextIndex], {
             autoAlpha: 0,
             scale: 0.98,
-            x: -10,
-            duration: 0.45,
-            ease: 'none',
-          }, position);
-          timeline.to(copies[index], {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.32,
-            ease: 'none',
-          }, position + 0.1);
-          timeline.to(panels[index - 1], {
-            autoAlpha: 0,
-            duration: 0.25,
-            ease: 'none',
-          }, position + 0.27);
+            x: direction * 20,
+            y: 12,
+          }, transitionAt)
+          .set(copies[nextIndex], { autoAlpha: 0, y: 22 }, transitionAt)
+          .call(() => updateActiveStage(nextIndex), [], transitionAt);
 
-          if (staggerGroups[index].length) {
-            timeline.to(staggerGroups[index], {
-              autoAlpha: 1,
-              yPercent: 0,
-              duration: 0.28,
-              stagger: 0.08,
-              ease: 'none',
-            }, position + 0.12);
-          }
-        }
-
-        return () => {
-          root.classList.remove('is-enhanced');
-          resetAccessibleStages();
-        };
-      });
-
-      media.add('(max-width: 767px) and (prefers-reduced-motion: no-preference)', () => {
-        updateProgress(0);
-        panels.forEach((panel, index) => {
-          const photo = panel.querySelector('.hero-photo img');
-          const student = panel.querySelector('.hero-student');
-          const copy = panel.querySelector('.hero-copy');
-          const label = copy.querySelector('.hero-label');
-          const title = copy.querySelector('.hero-title');
-          const support = copy.querySelector('.hero-support');
-          const keywords = copy.querySelectorAll('.hero-keywords > span');
-
-          gsap.fromTo(photo, { autoAlpha: 0, scale: 1.04 }, {
-            autoAlpha: 1,
-            scale: 1,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: photo,
-              start: 'top 92%',
-              end: 'top 55%',
-              scrub: 0.8,
-              invalidateOnRefresh: true,
-            },
-          });
-          gsap.fromTo(student, { autoAlpha: 0, scale: 1.04, x: 20, y: 20 }, {
-            autoAlpha: 1,
-            scale: 1,
-            x: 0,
-            y: 0,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: photo,
-              start: 'top 92%',
-              end: 'top 55%',
-              scrub: 0.8,
-              invalidateOnRefresh: true,
-            },
-          });
-
-          const copyTimeline = gsap.timeline({
-            scrollTrigger: {
-              trigger: copy,
-              start: 'top 92%',
-              end: 'top 58%',
-              scrub: 0.8,
-              invalidateOnRefresh: true,
-            },
-          });
-          copyTimeline.fromTo(label, { autoAlpha: 0, y: 20 }, {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.34,
-            ease: 'none',
-          }, 0);
-          copyTimeline.fromTo(title, { autoAlpha: 0, y: 25 }, {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.38,
-            ease: 'none',
-          }, 0.12);
-          if (support) {
-            copyTimeline.fromTo(support, { autoAlpha: 0, y: 20 }, {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.34,
-              ease: 'none',
-            }, 0.24);
-          }
-          if (keywords.length) {
-            copyTimeline.fromTo(keywords, { autoAlpha: 0, y: 14 }, {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.28,
-              stagger: 0.06,
-              ease: 'none',
-            }, 0.34);
-          }
-
-          ScrollTrigger.create({
-            trigger: panel,
-            start: 'top 68%',
-            onEnter: () => updateProgress(index),
-            onEnterBack: () => updateProgress(index),
-          });
-        });
-        return resetAccessibleStages;
-      });
-
-      media.add('(min-width: 768px) and (max-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
-        updateProgress(0);
-        panels.forEach((panel, index) => {
-          const photo = panel.querySelector('.hero-photo img');
-          const student = panel.querySelector('.hero-student');
-          const copy = panel.querySelector('.hero-copy');
-
-          gsap.fromTo(photo, { scale: 1.025 }, {
-            scale: 1,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: panel,
-              start: 'top 88%',
-              end: 'top 50%',
-              scrub: true,
-            },
-          });
-          gsap.fromTo(student, { autoAlpha: 0, scale: 1.04, x: 20, y: 20 }, {
-            autoAlpha: 1,
-            scale: 1,
-            x: 0,
-            y: 0,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: panel,
-              start: 'top 88%',
-              end: 'top 50%',
-              scrub: 0.8,
-              invalidateOnRefresh: true,
-            },
-          });
-          gsap.fromTo(copy, { autoAlpha: 0.72, y: 16 }, {
-            autoAlpha: 1,
-            y: 0,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: panel,
-              start: 'top 88%',
-              end: 'top 56%',
-              scrub: true,
-            },
-          });
-          ScrollTrigger.create({
-            trigger: panel,
-            start: 'top 68%',
-            onEnter: () => updateProgress(index),
-            onEnterBack: () => updateProgress(index),
-          });
-        });
-        return resetAccessibleStages;
-      });
-
-      media.add('(prefers-reduced-motion: reduce)', () => {
-        const students = panels.map((panel) => panel.querySelector('.hero-student'));
-        students.forEach((student) => {
-          student.style.opacity = '1';
-          student.style.visibility = 'visible';
-          student.style.transform = 'none';
-        });
-        return () => {
-          students.forEach((student) => {
-            student.style.removeProperty('opacity');
-            student.style.removeProperty('visibility');
-            student.style.removeProperty('transform');
-          });
-        };
-      });
-
-      return () => media.revert();
+        timeline.to(photos[index], {
+          autoAlpha: 0,
+          scale: 0.98,
+          duration: transitionDuration,
+          ease: 'power2.inOut',
+        }, transitionAt);
+        timeline.to(students[index], {
+          autoAlpha: 0,
+          scale: 0.98,
+          x: -direction * 12,
+          duration: transitionDuration,
+          ease: 'power2.inOut',
+        }, transitionAt);
+        timeline.to(copies[index], {
+          autoAlpha: 0,
+          y: -16,
+          duration: transitionDuration * 0.8,
+          ease: 'power2.inOut',
+        }, transitionAt);
+        timeline.to(photos[nextIndex], {
+          autoAlpha: 1,
+          scale: 1.035,
+          xPercent: 0,
+          duration: transitionDuration,
+          ease: 'power2.out',
+        }, transitionAt);
+        timeline.to(students[nextIndex], {
+          autoAlpha: 1,
+          scale: 1,
+          x: 0,
+          y: 0,
+          duration: transitionDuration,
+          ease: 'power2.out',
+        }, transitionAt);
+        timeline.to(copies[nextIndex], {
+          autoAlpha: 1,
+          y: 0,
+          duration: transitionDuration - 0.08,
+          ease: 'power2.out',
+        }, transitionAt + 0.08);
+        timeline.set(panels[index], { autoAlpha: 0, zIndex: 0 }, sectionStart + slideDuration);
+      }
     }, root);
 
-    let alive = true;
-    let refreshFrame;
-    const refreshAfterAssets = () => {
-      if (!alive) return;
-      cancelAnimationFrame(refreshFrame);
-      refreshFrame = requestAnimationFrame(() => {
-        if (alive) ScrollTrigger.refresh();
-      });
-    };
-    const images = Array.from(root.querySelectorAll('img'));
-    const onImageLoad = () => refreshAfterAssets();
-    const onImageError = (event) => {
-      console.error('Unable to load Aurobana hero image:', event.currentTarget.src);
-      refreshAfterAssets();
-    };
-
-    images.forEach((image) => {
-      image.addEventListener('load', onImageLoad);
-      image.addEventListener('error', onImageError);
-      if (image.complete) {
-        if (image.naturalWidth === 0) onImageError({ currentTarget: image });
-        else refreshAfterAssets();
-      }
-    });
-    document.fonts?.ready.then(refreshAfterAssets);
-
     return () => {
-      alive = false;
-      cancelAnimationFrame(refreshFrame);
-      images.forEach((image) => {
-        image.removeEventListener('load', onImageLoad);
-        image.removeEventListener('error', onImageError);
-      });
       context.revert();
+      root.classList.remove('is-enhanced', 'is-mobile-enhanced');
+      delete root.dataset.activeStage;
     };
   }, []);
 
@@ -437,16 +218,17 @@ export default function Hero() {
             <article
               className={`hero-panel hero-panel--${stage.image}${index === 5 ? ' hero-panel--mission' : ''}`}
               key={`${stage.image}-${index}`}
-              aria-hidden="false"
+              aria-hidden={index !== 0}
             >
               <figure className="hero-photo">
                 <img
                   src={image.src}
                   alt={image.alt}
                   style={{ objectPosition: image.position }}
-                  loading={index === 0 ? 'eager' : 'lazy'}
+                  loading="eager"
                   fetchPriority={index === 0 ? 'high' : 'auto'}
                   decoding="async"
+                  onError={(event) => console.error('Unable to load Aurobana hero image:', event.currentTarget.src)}
                 />
                 <img
                   className="hero-student"
@@ -456,6 +238,7 @@ export default function Hero() {
                   loading="eager"
                   fetchPriority={index === 0 ? 'high' : 'auto'}
                   decoding="async"
+                  onError={(event) => console.error('Unable to load Aurobana hero student image:', event.currentTarget.src)}
                 />
               </figure>
               <div className="hero-copy">

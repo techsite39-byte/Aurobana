@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { ArrowUpRight, Menu, X } from 'lucide-react';
 
 const navItems = [
-  { label: 'Stories', href: '#stories' },
-  { label: 'FAQ', href: '#faq' },
+  { label: 'Home', href: '#top' },
+  { label: 'About Us', href: '#school-philosophy' },
+  { label: 'Blog', href: '#stories' },
 ];
 
 export default function Header() {
@@ -42,7 +43,7 @@ export default function Header() {
             </a>
           ))}
           <a className="admissions-button" href="#admissions">
-            Admissions <ArrowUpRight size={16} strokeWidth={1.8} aria-hidden="true" />
+            Reach Us <ArrowUpRight size={16} strokeWidth={1.8} aria-hidden="true" />
           </a>
         </nav>
 
@@ -71,7 +72,7 @@ export default function Header() {
           </a>
         ))}
         <a className="mobile-admissions" href="#admissions" onClick={closeMenu}>
-          <span>03</span>Admissions <ArrowUpRight size={18} aria-hidden="true" />
+          <span>04</span>Reach Us <ArrowUpRight size={18} aria-hidden="true" />
         </a>
       </nav>
     </header>
