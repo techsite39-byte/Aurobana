@@ -28,19 +28,39 @@
   overflow: hidden;
   margin: 0;
   background: var(--hero-forest);
+  isolation: isolate;
 }
 
 .hero-photo::after {
   position: absolute;
+  z-index: 1;
   inset: 0;
   background: linear-gradient(0deg, rgba(10, 35, 28, 0.32), transparent 58%);
   content: '';
+  pointer-events: none;
 }
 
-.hero-photo img {
+.hero-photo img:not(.hero-student) {
+  position: relative;
+  z-index: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.hero-student {
+  position: absolute;
+  z-index: 2;
+  right: 5%;
+  bottom: 0;
+  width: auto;
+  height: clamp(220px, 40vh, 360px);
+  max-width: 42%;
+  object-fit: contain;
+  object-position: bottom;
+  background: transparent;
+  filter: drop-shadow(0 18px 26px rgba(0, 0, 0, 0.16));
+  pointer-events: none;
 }
 
 .hero-copy {
@@ -118,6 +138,7 @@
 
   .hero-story.is-enhanced .hero-photo {
     position: absolute;
+    z-index: 1;
     inset: 0;
     height: auto;
     background: var(--hero-forest);
@@ -129,14 +150,19 @@
       linear-gradient(0deg, rgba(10, 35, 28, 0.42), transparent 36%);
   }
 
-  .hero-story.is-enhanced .hero-photo img {
+  .hero-story.is-enhanced .hero-photo img:not(.hero-student) {
     position: absolute;
     inset: 0;
   }
 
+  .hero-story.is-enhanced .hero-student {
+    right: clamp(56px, 8vw, 160px);
+    height: clamp(320px, 55svh, 720px);
+  }
+
   .hero-story.is-enhanced .hero-copy {
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     inset-block: 12%;
     left: 8.3%;
     display: flex;
@@ -278,10 +304,16 @@
     height: clamp(320px, 54svh, 560px);
   }
 
-  .hero-photo img {
+  .hero-photo img:not(.hero-student) {
     display: block;
     max-width: 100%;
     object-fit: cover;
+  }
+
+  .hero-student {
+    right: 3%;
+    height: clamp(220px, 36svh, 340px);
+    max-width: 42%;
   }
 
   .hero-copy {
@@ -432,23 +464,23 @@
     font-size: 10px;
   }
 
-  .hero-panel--intro .hero-photo img {
+  .hero-panel--intro .hero-photo img:not(.hero-student) {
     object-position: center 42%;
   }
 
-  .hero-panel--school .hero-photo img {
+  .hero-panel--school .hero-photo img:not(.hero-student) {
     object-position: center 42%;
   }
 
-  .hero-panel--community .hero-photo img {
+  .hero-panel--community .hero-photo img:not(.hero-student) {
     object-position: center 46%;
   }
 
-  .hero-panel--motto .hero-photo img {
+  .hero-panel--motto .hero-photo img:not(.hero-student) {
     object-position: center 40%;
   }
 
-  .hero-panel--vision .hero-photo img {
+  .hero-panel--vision .hero-photo img:not(.hero-student) {
     object-position: center 42%;
   }
 }
@@ -475,15 +507,25 @@
   }
 
   .hero-photo,
-  .hero-photo img {
+  .hero-photo img:not(.hero-student) {
     width: 100%;
     max-width: 100%;
+  }
+
+  .hero-student {
+    right: 2%;
+    height: clamp(190px, 38svh, 310px);
+    max-width: 58%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-story .hero-photo img {
+  .hero-story .hero-photo img:not(.hero-student) {
     transform: none !important;
     clip-path: none !important;
+  }
+
+  .hero-story .hero-student {
+    transform: none !important;
   }
 }

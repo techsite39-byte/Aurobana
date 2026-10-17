@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { heroImages } from '../data/heroImages.js';
+import { heroStudents } from '../data/heroStudents.js';
 import '../hero.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -107,6 +108,7 @@ export default function Hero() {
       media.add('(min-width: 1025px) and (prefers-reduced-motion: no-preference)', () => {
         const frame = root.querySelector('.hero-stage');
         const photos = panels.map((panel) => panel.querySelector('.hero-photo img'));
+        const students = panels.map((panel) => panel.querySelector('.hero-student'));
         const copies = panels.map((panel) => panel.querySelector('.hero-copy'));
         const staggerGroups = panels.map((panel) => (
           panel.querySelectorAll('.hero-stagger > span, .hero-keywords > span')
@@ -121,6 +123,8 @@ export default function Hero() {
         gsap.set(panels[0], { autoAlpha: 1 });
         gsap.set(photos, { scale: 1.08, clipPath: 'inset(0 100% 0 0)', xPercent: 0 });
         gsap.set(photos[0], { scale: 1.08, clipPath: 'inset(0)' });
+        gsap.set(students, { autoAlpha: 0, scale: 1.04, x: 20, y: 20 });
+        gsap.set(students[0], { autoAlpha: 1, scale: 1, x: 0, y: 0 });
         gsap.set(copies, { autoAlpha: 0, y: 40 });
         gsap.set(copies[0], { autoAlpha: 1, y: 0 });
         staggerGroups.forEach((group) => {
@@ -177,6 +181,21 @@ export default function Hero() {
             duration: 0.52,
             ease: 'none',
           }, position);
+          timeline.to(students[index], {
+            autoAlpha: 1,
+            scale: 1,
+            x: 0,
+            y: 0,
+            duration: 0.52,
+            ease: 'none',
+          }, position);
+          timeline.to(students[index - 1], {
+            autoAlpha: 0,
+            scale: 0.98,
+            x: -10,
+            duration: 0.45,
+            ease: 'none',
+          }, position);
           timeline.to(copies[index], {
             autoAlpha: 1,
             y: 0,
@@ -210,6 +229,7 @@ export default function Hero() {
         updateProgress(0);
         panels.forEach((panel, index) => {
           const photo = panel.querySelector('.hero-photo img');
+          const student = panel.querySelector('.hero-student');
           const copy = panel.querySelector('.hero-copy');
           const label = copy.querySelector('.hero-label');
           const title = copy.querySelector('.hero-title');
@@ -219,6 +239,20 @@ export default function Hero() {
           gsap.fromTo(photo, { autoAlpha: 0, scale: 1.04 }, {
             autoAlpha: 1,
             scale: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: photo,
+              start: 'top 92%',
+              end: 'top 55%',
+              scrub: 0.8,
+              invalidateOnRefresh: true,
+            },
+          });
+          gsap.fromTo(student, { autoAlpha: 0, scale: 1.04, x: 20, y: 20 }, {
+            autoAlpha: 1,
+            scale: 1,
+            x: 0,
+            y: 0,
             ease: 'none',
             scrollTrigger: {
               trigger: photo,
@@ -282,6 +316,7 @@ export default function Hero() {
         updateProgress(0);
         panels.forEach((panel, index) => {
           const photo = panel.querySelector('.hero-photo img');
+          const student = panel.querySelector('.hero-student');
           const copy = panel.querySelector('.hero-copy');
 
           gsap.fromTo(photo, { scale: 1.025 }, {
@@ -292,6 +327,20 @@ export default function Hero() {
               start: 'top 88%',
               end: 'top 50%',
               scrub: true,
+            },
+          });
+          gsap.fromTo(student, { autoAlpha: 0, scale: 1.04, x: 20, y: 20 }, {
+            autoAlpha: 1,
+            scale: 1,
+            x: 0,
+            y: 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: panel,
+              start: 'top 88%',
+              end: 'top 50%',
+              scrub: 0.8,
+              invalidateOnRefresh: true,
             },
           });
           gsap.fromTo(copy, { autoAlpha: 0.72, y: 16 }, {
@@ -313,6 +362,22 @@ export default function Hero() {
           });
         });
         return resetAccessibleStages;
+      });
+
+      media.add('(prefers-reduced-motion: reduce)', () => {
+        const students = panels.map((panel) => panel.querySelector('.hero-student'));
+        students.forEach((student) => {
+          student.style.opacity = '1';
+          student.style.visibility = 'visible';
+          student.style.transform = 'none';
+        });
+        return () => {
+          students.forEach((student) => {
+            student.style.removeProperty('opacity');
+            student.style.removeProperty('visibility');
+            student.style.removeProperty('transform');
+          });
+        };
       });
 
       return () => media.revert();
@@ -367,6 +432,7 @@ export default function Hero() {
         </ol>
         {stages.map((stage, index) => {
           const image = heroImages[stage.image];
+          const student = heroStudents[index];
           return (
             <article
               className={`hero-panel hero-panel--${stage.image}${index === 5 ? ' hero-panel--mission' : ''}`}
@@ -379,6 +445,15 @@ export default function Hero() {
                   alt={image.alt}
                   style={{ objectPosition: image.position }}
                   loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchPriority={index === 0 ? 'high' : 'auto'}
+                  decoding="async"
+                />
+                <img
+                  className="hero-student"
+                  src={student}
+                  alt=""
+                  aria-hidden="true"
+                  loading="eager"
                   fetchPriority={index === 0 ? 'high' : 'auto'}
                   decoding="async"
                 />
