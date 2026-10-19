@@ -1,14 +1,10 @@
-const unsplash = (photoId, position = 'center') => ({
-  src: `https://images.unsplash.com/${photoId}?auto=format&fit=crop&w=1200&q=85`,
-  position,
-});
-
 export const schoolHighlights = [
   {
     id: 'school-life',
     title: 'School Life',
     image: {
-      ...unsplash('photo-1509062522246-3755977927d7', 'center 45%'),
+      src: '/images/sec2.1.png',
+      position: 'center',
       alt: 'Students sharing a lively moment in their classroom',
     },
     description: 'Experience a vibrant school life filled with learning, friendships, creativity, and discovery. Every day brings new experiences, meaningful connections, and opportunities to grow. We create an environment where students feel confident, valued, and inspired. Discover a school life that goes beyond the classroom.',
@@ -17,7 +13,8 @@ export const schoolHighlights = [
     id: 'academics',
     title: 'Academics',
     image: {
-      ...unsplash('photo-1427504494785-3a9ca7044f45', 'center 42%'),
+      src: '/images/sec2.2.png',
+      position: 'center',
       alt: 'Students learning and collaborating in a classroom',
     },
     description: 'Build strong foundations. Think beyond boundaries. Our academic approach encourages curiosity, critical thinking, and a love for learning. Students are guided to understand, explore, question, and apply their knowledge. Learn today. Think tomorrow. Lead the future.',
@@ -26,7 +23,8 @@ export const schoolHighlights = [
     id: 'sports',
     title: 'Sports',
     image: {
-      ...unsplash('photo-1461896836934-ffe607ba8211', 'center'),
+      src: '/images/sec2.3.png',
+      position: 'center',
       alt: 'A student taking part in a school sports activity',
     },
     description: 'Move with confidence. Play with purpose. Sports build discipline, teamwork, resilience, and the courage to challenge yourself. From participation to performance, every student gets the opportunity to discover their potential. Play hard. Grow strong. Rise together.',

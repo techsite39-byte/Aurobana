@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from 'react';
-import { ArrowUpRight, ImagePlus } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { campusCards, campusStatistics } from '../data/campusSections.js';
@@ -276,11 +276,12 @@ export default function CampusSections() {
             <figure
               className="campus-sections__achievement-placeholder"
             >
-              <ImagePlus size={30} strokeWidth={1.3} aria-hidden="true" />
-              <figcaption>
-                Aurobana achievement imagery
-                <span>will be added here</span>
-              </figcaption>
+              <img
+                src="/images/sec4.png"
+                alt="Aurobana student achievement imagery"
+                loading="lazy"
+                decoding="async"
+              />
             </figure>
           </div>
         </div>

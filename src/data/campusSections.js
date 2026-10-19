@@ -1,9 +1,3 @@
-import { schoolHighlights } from './schoolHighlights.js';
-
-const schoolImages = Object.fromEntries(
-  schoolHighlights.map(({ id, image }) => [id, image]),
-);
-
 export const campusCards = [
   {
     id: 'early-childhood',
@@ -11,7 +5,8 @@ export const campusCards = [
     subtitle: 'Preschool & Early Childhood',
     details: 'Playgroup – Grade III',
     image: {
-      ...schoolImages['school-life'],
+      src: '/images/sec3.1.png',
+      position: 'center',
       alt: 'Students learning together in a school classroom',
     },
   },
@@ -21,7 +16,8 @@ export const campusCards = [
     subtitle: 'Boarding & Beyond',
     details: 'Grade IV – Grade XII',
     image: {
-      ...schoolImages.sports,
+      src: '/images/sec3.2.png',
+      position: 'center',
       alt: 'A student taking part in a school sports activity',
     },
   },
