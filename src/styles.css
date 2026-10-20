@@ -1081,6 +1081,18 @@ img { display: block; max-width: 100%; }
   font-weight: 600;
 }
 
+.footer-contact-card__details a {
+  color: var(--paper);
+  text-decoration: none;
+  text-underline-offset: 3px;
+  transition: color 180ms ease, text-decoration-color 180ms ease;
+}
+
+.footer-contact-card__details a:hover {
+  color: var(--yellow);
+  text-decoration: underline;
+}
+
 .footer-editorial {
   position: relative;
   z-index: 2;

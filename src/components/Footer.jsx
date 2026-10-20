@@ -106,9 +106,9 @@ export default function Footer() {
                 <img src="/images/aurobana-logo.png" alt="Aurobana Indian School" />
               </a>
               <div className="footer-contact-card__details">
-                <p><Phone aria-hidden="true" /><span><strong>Phone</strong>Details not listed on this site</span></p>
-                <p><Mail aria-hidden="true" /><span><strong>Email</strong>Details not listed on this site</span></p>
-                <p><MapPin aria-hidden="true" /><span><strong>Address</strong>Details not listed on this site</span></p>
+                <p><Phone aria-hidden="true" /><span><strong>Phone</strong><a href="tel:+919943090991">99430 90991</a></span></p>
+                <p><Mail aria-hidden="true" /><span><strong>Email</strong><a href="mailto:principal@aurobanaindian.org">principal@aurobanaindian.org</a></span></p>
+                <p><MapPin aria-hidden="true" /><span><strong>Campus</strong>Campus @ Nehru Nagar,<br />By-pass Road,<br />Madurai - 625 010</span></p>
               </div>
             </section>
 
