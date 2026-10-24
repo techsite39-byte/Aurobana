@@ -32,7 +32,7 @@ export const reviews = [
 ];
 
 export const storyImage = {
-  src: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=2200&q=88',
+  src: '/new/AIS-%20Photos/photo_5_2026-10-22_11-07-02.jpg',
   alt: 'Students learning together in a bright classroom',
   position: 'center 48%',
 };

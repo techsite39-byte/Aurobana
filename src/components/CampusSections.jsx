@@ -165,7 +165,9 @@ export default function CampusSections() {
           <div className="campus-sections__campus-grid">
             {campusCards.map((campus) => (
               <article className="campus-sections__campus-card" key={campus.id}>
-                <figure className="campus-sections__campus-image">
+                <figure
+                  className={`campus-sections__campus-image${campus.id === 'boarding-beyond' ? ' campus-sections__campus-image--contain' : ''}`}
+                >
                   <img
                     src={campus.image.src}
                     alt={campus.image.alt}
@@ -277,7 +279,7 @@ export default function CampusSections() {
               className="campus-sections__achievement-placeholder"
             >
               <img
-                src="/images/sec4.png"
+                src="/new/AIS-%20Photos/photo_2_2026-03-06_11-48-02.jpg"
                 alt="Aurobana student achievement imagery"
                 loading="lazy"
                 decoding="async"

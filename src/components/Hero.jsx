@@ -212,7 +212,7 @@ export default function Hero() {
           ))}
         </ol>
         {stages.map((stage, index) => {
-          const image = heroImages[stage.image];
+          const image = heroImages[index === 5 ? 'mission' : stage.image];
           const student = heroStudents[index];
           return (
             <article

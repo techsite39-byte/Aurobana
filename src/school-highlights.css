@@ -127,11 +127,50 @@
   overflow: hidden;
   border: 0;
   background-color: #75d9e5;
-  background-image: url('/images/bg1.png');
+  background-image: url('/new/AIS-%20Photos/bg7.png');
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
   transform: translateX(-50%);
+}
+
+.school-highlights__slideshow {
+  position: absolute;
+  display: grid;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.school-highlights__slideshow-image {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+
+.school-highlights__slideshow-image.is-active {
+  opacity: 1;
+}
+
+.school-highlights__philosophy-slideshow {
+  position: absolute;
+  z-index: 0;
+  inset: 0 2% 0 52%;
+  width: auto;
+  height: 100%;
+  min-height: 650px;
+  place-items: center;
+}
+
+.school-highlights__philosophy-slideshow .school-highlights__slideshow-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-position: center;
+  object-fit: cover;
 }
 
 .school-highlights__philosophy-content {
@@ -209,7 +248,7 @@
   left: 50%;
   display: flex;
   width: 100vw;
-  min-height: 100svh;
+  min-height: max(780px, 100svh);
   box-sizing: border-box;
   align-items: center;
   margin-top: 0;
@@ -223,20 +262,47 @@
   position: absolute;
   z-index: 0;
   inset: 0;
-  background-image: url('/images/bg2.png');
+  background-image: url('/new/AIS-%20Photos/bg8.png');
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.school-highlights__features-slideshow {
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: min(35vw, 650px);
+  height: 100%;
+  place-items: center;
+}
+
+.school-highlights__features-slideshow .school-highlights__slideshow-image {
+  position: absolute;
+  top: 6%;
+  right: 0;
+  left: 0;
+  width: 100%;
+  max-width: none;
+  height: 88%;
+  object-fit: contain;
+  object-position: center;
+  opacity: 0;
+  transform: scale(2.3);
+}
+
+.school-highlights__features-slideshow .school-highlights__slideshow-image.is-active {
+  opacity: 1;
 }
 
 .school-highlights__features-content {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.85fr);
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
   gap: 42px;
   align-items: start;
-  width: min(76vw, 1180px);
+  width: min(60vw, 1100px);
   box-sizing: border-box;
   margin: 0 0 0 auto;
   padding: 64px 70px;
@@ -267,6 +333,17 @@
   display: block;
   color: var(--highlights-red);
   font-weight: 500;
+}
+
+.school-highlights__features-image {
+  display: block;
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  object-fit: contain;
 }
 
 .school-highlights__features ul {
@@ -328,8 +405,8 @@
 
 @media (min-width: 1101px) and (max-width: 1600px) {
   .school-highlights__features-content {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.65fr);
-    width: min(63vw, 900px);
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+    width: min(60vw, 1100px);
     padding: 48px 50px;
   }
 }
@@ -397,6 +474,22 @@
     background-size: auto 460px;
   }
 
+  .school-highlights__features-slideshow {
+    top: 0;
+    right: 0;
+    left: 0;
+    width: auto;
+    height: 420px;
+    aspect-ratio: auto;
+    transform: none;
+  }
+
+  .school-highlights__features-slideshow .school-highlights__slideshow-image {
+    top: 0;
+    height: 100%;
+    transform: scale(1);
+  }
+
   .school-highlights__features-content {
     grid-template-columns: minmax(0, 1fr);
     gap: 24px;
@@ -462,6 +555,12 @@
     background-size: auto 360px;
   }
 
+  .school-highlights__philosophy-slideshow {
+    inset: 0 10% auto;
+    height: 190px;
+    min-height: 0;
+  }
+
   .school-highlights__philosophy-content {
     width: 100%;
     padding: 28px 24px;
@@ -496,6 +595,10 @@
 
   .school-highlights__features-background {
     background-position: 18% center;
+  }
+
+  .school-highlights__features-slideshow .school-highlights__slideshow-image {
+    transform: scale(1.5);
   }
 
   .school-highlights__features-heading {

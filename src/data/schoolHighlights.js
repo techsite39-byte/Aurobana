@@ -3,7 +3,7 @@ export const schoolHighlights = [
     id: 'school-life',
     title: 'School Life',
     image: {
-      src: '/images/sec2.1.png',
+      src: '/new/AIS-%20Photos/schoollifes.JPG',
       position: 'center',
       alt: 'Students sharing a lively moment in their classroom',
     },
@@ -13,7 +13,7 @@ export const schoolHighlights = [
     id: 'academics',
     title: 'Academics',
     image: {
-      src: '/images/sec2.2.png',
+      src: '/new/AIS-%20Photos/acadamics.jpg',
       position: 'center',
       alt: 'Students learning and collaborating in a classroom',
     },
@@ -23,7 +23,7 @@ export const schoolHighlights = [
     id: 'sports',
     title: 'Sports',
     image: {
-      src: '/images/sec2.3.png',
+      src: '/new/AIS-%20Photos/sports.jpg',
       position: 'center',
       alt: 'A student taking part in a school sports activity',
     },

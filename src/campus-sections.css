@@ -239,6 +239,12 @@
 
 .campus-sections__campus-card:hover .campus-sections__campus-image img { transition: transform 160ms cubic-bezier(0.2, 0, 0, 1); transform: scale(1.02); }
 
+.campus-sections__campus-image--contain img,
+.campus-sections__campus-card:hover .campus-sections__campus-image--contain img {
+  object-fit: contain;
+  transform: none;
+}
+
 .campus-sections__campus-body {
   padding: clamp(22px, 3vw, 32px);
 }

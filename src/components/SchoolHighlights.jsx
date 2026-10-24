@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ArrowUpRight, BookOpen, School, Trophy } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -12,6 +12,62 @@ const highlightIcons = {
   academics: BookOpen,
   sports: Trophy,
 };
+
+const philosophyImages = [
+  '/new/AIS-%20Photos/bg7-1.png',
+  '/new/AIS-%20Photos/bg7-2.png',
+  '/new/AIS-%20Photos/bg7-3.png',
+];
+
+const featuresImages = [
+  '/new/AIS-%20Photos/bg8-1.png',
+  '/new/AIS-%20Photos/bg8-2.png',
+  '/new/AIS-%20Photos/bg8-3.png',
+];
+
+function ImageSlideshow({ images, className, sequentialFade = false }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    if (sequentialFade) {
+      let transitionTimeout;
+      const intervalId = window.setInterval(() => {
+        setIsVisible(false);
+        transitionTimeout = window.setTimeout(() => {
+          setActiveIndex((currentIndex) => (currentIndex + 1) % images.length);
+          setIsVisible(true);
+        }, 700);
+      }, 2000);
+
+      return () => {
+        window.clearInterval(intervalId);
+        window.clearTimeout(transitionTimeout);
+      };
+    }
+
+    const intervalId = window.setInterval(() => {
+      setActiveIndex((currentIndex) => (currentIndex + 1) % images.length);
+    }, 2000);
+
+    return () => window.clearInterval(intervalId);
+  }, [images.length, sequentialFade]);
+
+  return (
+    <div className={className} aria-hidden="true">
+      {images.map((src, index) => (
+        <img
+          className={`school-highlights__slideshow-image${index === activeIndex && isVisible ? ' is-active' : ''}`}
+          key={src}
+          src={src}
+          alt=""
+          loading="eager"
+          decoding="async"
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function SchoolHighlights() {
   const sectionRef = useRef(null);
@@ -131,6 +187,11 @@ export default function SchoolHighlights() {
         </div>
 
         <div className="school-highlights__philosophy" id="school-philosophy">
+          <ImageSlideshow
+            className="school-highlights__slideshow school-highlights__philosophy-slideshow"
+            images={philosophyImages}
+            sequentialFade
+          />
           <div className="school-highlights__philosophy-content">
             <figure className="school-highlights__quote">
               <span className="school-highlights__quote-mark" aria-hidden="true">&ldquo;</span>
@@ -148,9 +209,21 @@ export default function SchoolHighlights() {
 
         <div className="school-highlights__features" id="school-features">
           <div className="school-highlights__features-background" aria-hidden="true" />
+          <ImageSlideshow
+            className="school-highlights__slideshow school-highlights__features-slideshow"
+            images={featuresImages}
+            sequentialFade
+          />
           <div className="school-highlights__features-content">
             <div className="school-highlights__features-heading">
               <h2>School <em>features.</em></h2>
+              <img
+                className="school-highlights__features-image"
+                src="/new/AIS-%20Photos/photo_2_2026-03-06_13-05-20.jpg"
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
             </div>
             <ul>
               {schoolFeatures.map((feature) => (
