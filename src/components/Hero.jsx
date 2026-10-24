@@ -98,11 +98,11 @@ export default function Hero() {
       const copies = panels.map((panel) => panel.querySelector('.hero-copy'));
 
       gsap.set(panels, { autoAlpha: 0, zIndex: 0 });
-      gsap.set(photos, { autoAlpha: 0, scale: 1.08, xPercent: 0 });
+      gsap.set(photos, { autoAlpha: 0, scale: 1, xPercent: 0 });
       gsap.set(students, { autoAlpha: 0, scale: 0.98, x: 0, y: 12 });
       gsap.set(copies, { autoAlpha: 0, y: 22 });
       gsap.set(panels[0], { autoAlpha: 1, zIndex: 2 });
-      gsap.set(photos[0], { autoAlpha: 1, scale: 1.08 });
+      gsap.set(photos[0], { autoAlpha: 1, scale: 1 });
       gsap.set(students[0], { autoAlpha: 1, scale: 1, x: 0, y: 0 });
       gsap.set(copies[0], { autoAlpha: 1, y: 0 });
 
@@ -123,7 +123,7 @@ export default function Hero() {
         const direction = index % 2 === 0 ? 1 : -1;
 
         timeline.to(photos[index], {
-          scale: 1.035,
+          scale: 1,
           duration: transitionStart,
           ease: 'sine.inOut',
         }, sectionStart);
@@ -138,7 +138,7 @@ export default function Hero() {
           .set(panels[nextIndex], { autoAlpha: 1, zIndex: 3 }, transitionAt)
           .set(photos[nextIndex], {
             autoAlpha: 0,
-            scale: 1.08,
+            scale: 1,
             xPercent: direction * 1.2,
           }, transitionAt)
           .set(students[nextIndex], {
@@ -152,7 +152,7 @@ export default function Hero() {
 
         timeline.to(photos[index], {
           autoAlpha: 0,
-          scale: 0.98,
+          scale: 1,
           duration: transitionDuration,
           ease: 'power2.inOut',
         }, transitionAt);
@@ -171,7 +171,7 @@ export default function Hero() {
         }, transitionAt);
         timeline.to(photos[nextIndex], {
           autoAlpha: 1,
-          scale: 1.035,
+          scale: 1,
           xPercent: 0,
           duration: transitionDuration,
           ease: 'power2.out',

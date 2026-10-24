@@ -23,9 +23,18 @@ export const campusCards = [
   },
 ];
 
-export const campusStatistics = Array.from({ length: 6 }, (_, index) => ({
+const statisticLabels = [
+  'Academic Excellence',
+  'Inclusive Learning',
+  'Nurturing Talents',
+  'Values & Discipline',
+  'Safe & Caring Environment',
+  'Holistic Development',
+];
+
+export const campusStatistics = statisticLabels.map((label, index) => ({
   id: `statistic-${index + 1}`,
-  label: `Statistic ${String(index + 1).padStart(2, '0')}`,
+  label,
   value: '—',
-  description: 'Aurobana data to be added',
+  description: '',
 }));

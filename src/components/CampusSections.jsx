@@ -222,10 +222,10 @@ export default function CampusSections() {
           </header>
 
           <div className="campus-sections__stat-grid">
-            {campusStatistics.map((statistic) => (
+            {campusStatistics.map((statistic, index) => (
               <article className="campus-sections__stat-card" key={statistic.id}>
                 <span className="campus-sections__stat-mark" aria-hidden="true">
-                  {statistic.label.slice(-2)}
+                  {String(index + 1).padStart(2, '0')}
                 </span>
                 <div>
                   <p className="campus-sections__stat-value">{statistic.value}</p>
