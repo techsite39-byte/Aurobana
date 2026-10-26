@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from 'react';
-import { ArrowUpRight, Mail, MapPin, Phone, Play, UsersRound } from 'lucide-react';
+import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react';
+import { FaFacebookF, FaInstagram, FaWhatsapp, FaYoutube } from 'react-icons/fa';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { BookStack, OpenBook, PaperAirplane, Pencil, SchoolStar } from './SchoolDecorations.jsx';
@@ -16,6 +17,13 @@ const exploreLinks = [
   { label: 'Admissions', href: '#admissions' },
   { label: 'Blog', href: '#stories' },
   { label: 'Learning Beyond One Campus', href: '#campus-sections-title' },
+];
+
+const socialLinks = [
+  { label: 'Facebook', href: 'https://www.facebook.com/aurobanaindianschoolmadurai/', Icon: FaFacebookF },
+  { label: 'Instagram', href: 'https://www.instagram.com/aurobana_indian_school/', Icon: FaInstagram },
+  { label: 'YouTube', href: 'https://www.youtube.com/@aurobanaindianschool', Icon: FaYoutube },
+  { label: 'WhatsApp Channel', href: 'https://whatsapp.com/channel/0029Va6LNyJKwqSJvVaM0H3h', Icon: FaWhatsapp },
 ];
 
 export default function Footer() {
@@ -143,10 +151,11 @@ export default function Footer() {
           </div>
         </div>
         <div className="footer-social-bar" role="group" aria-label="Contact and social channel icons">
-          <span aria-hidden="true"><Mail /></span>
-          <span aria-hidden="true"><Play /></span>
-          <span aria-hidden="true"><UsersRound /></span>
-          <span aria-hidden="true"><Phone /></span>
+          {socialLinks.map(({ label, href, Icon }) => (
+            <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}>
+              <Icon aria-hidden="true" focusable="false" />
+            </a>
+          ))}
         </div>
       </footer>
     </>
