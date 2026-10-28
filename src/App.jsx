@@ -1,4 +1,6 @@
 import { useLayoutEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube } from 'react-icons/fa';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -13,6 +15,13 @@ import FAQ from './components/FAQ.jsx';
 import Footer from './components/Footer.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const socialLinks = [
+  { label: 'Facebook', href: 'https://www.facebook.com/aurobanaindianschoolmadurai/', Icon: FaFacebookF },
+  { label: 'Instagram', href: 'https://www.instagram.com/aurobana_indian_school/', Icon: FaInstagram },
+  { label: 'YouTube', href: 'https://www.youtube.com/@aurobanaindianschool', Icon: FaYoutube },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/aurobana-indian-school', Icon: FaLinkedinIn },
+];
 
 export default function App() {
   useLayoutEffect(() => {
@@ -132,18 +141,30 @@ export default function App() {
   }, []);
 
   return (
-    <div id="top" className="site-shell">
-      <Header />
-      <main>
-        <Hero />
-        <SchoolHighlights />
-        <CampusSections />
-        <LearningStory />
-        <Reviews />
-        <StoryImage />
-        <FAQ />
-      </main>
-      <Footer />
-    </div>
+    <>
+      <div id="top" className="site-shell">
+        <Header />
+        <main>
+          <Hero />
+          <SchoolHighlights />
+          <CampusSections />
+          <LearningStory />
+          <Reviews />
+          <StoryImage />
+          <FAQ />
+        </main>
+        <Footer />
+      </div>
+      {createPortal(
+        <div className="footer-social-bar" role="group" aria-label="Contact and social channel icons">
+          {socialLinks.map(({ label, href, Icon }) => (
+            <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}>
+              <Icon aria-hidden="true" focusable="false" />
+            </a>
+          ))}
+        </div>,
+        document.body,
+      )}
+    </>
   );
 }

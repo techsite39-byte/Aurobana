@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react';
 import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react';
-import { FaFacebookF, FaInstagram, FaWhatsapp, FaYoutube } from 'react-icons/fa';
+import { FaWhatsapp } from 'react-icons/fa';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { BookStack, OpenBook, PaperAirplane, Pencil, SchoolStar } from './SchoolDecorations.jsx';
@@ -17,13 +17,6 @@ const exploreLinks = [
   { label: 'Admissions', href: '#admissions' },
   { label: 'Blog', href: '#stories' },
   { label: 'Learning Beyond One Campus', href: '#campus-sections-title' },
-];
-
-const socialLinks = [
-  { label: 'Facebook', href: 'https://www.facebook.com/aurobanaindianschoolmadurai/', Icon: FaFacebookF },
-  { label: 'Instagram', href: 'https://www.instagram.com/aurobana_indian_school/', Icon: FaInstagram },
-  { label: 'YouTube', href: 'https://www.youtube.com/@aurobanaindianschool', Icon: FaYoutube },
-  { label: 'WhatsApp Channel', href: 'https://whatsapp.com/channel/0029Va6LNyJKwqSJvVaM0H3h', Icon: FaWhatsapp },
 ];
 
 export default function Footer() {
@@ -61,23 +54,6 @@ export default function Footer() {
         },
       });
 
-      gsap.fromTo('.footer-social-bar', {
-        autoAlpha: 0,
-        y: 20,
-        scale: 0.96,
-      }, {
-        autoAlpha: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.8,
-        delay: 0.12,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: footer,
-          start: 'top 82%',
-          once: true,
-        },
-      });
     }, footer);
 
     return () => {
@@ -150,14 +126,16 @@ export default function Footer() {
             <a href="#top" aria-label="Back to top">Back to top <ArrowUpRight size={13} aria-hidden="true" /></a>
           </div>
         </div>
-        <div className="footer-social-bar" role="group" aria-label="Contact and social channel icons">
-          {socialLinks.map(({ label, href, Icon }) => (
-            <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}>
-              <Icon aria-hidden="true" focusable="false" />
-            </a>
-          ))}
-        </div>
       </footer>
+      <a
+        className="whatsapp-channel-button"
+        href="https://whatsapp.com/channel/0029Va6LNyJKwqSJvVaM0H3h"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Join our WhatsApp Channel"
+      >
+        <FaWhatsapp aria-hidden="true" focusable="false" />
+      </a>
     </>
   );
 }
